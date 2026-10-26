@@ -1,0 +1,372 @@
+{
+  "started_at": "2026-10-23T15:24:33.221643+00:00",
+  "environment": "Two Ubuntu 24.04 QEMU/WHPX VMs on one Windows 11 Home laptop",
+  "tests": [
+    {
+      "name": "Authenticated SMB and read-only NFS permissions",
+      "started_at": "2026-10-23T15:24:33.733633+00:00",
+      "evidence": {
+        "linux_access": {
+          "node": "backup01",
+          "code": 0,
+          "stdout": "NAS Lab course materials: SMB + NFS read-only validation.\nro,relatime,vers=4.2,rsize=524288,wsize=524288,namlen=255,soft,proto=tcp,timeo=20,retrans=1,sec=sys,clientaddr=172.28.90.20,local_lock=none,addr=172.28.90.10\n",
+          "stderr": "getting file \\course-guide.txt of size 58 as /tmp/naslab-course.txt (28.3 KiloBytes/sec) (average 28.3 KiloBytes/sec)\n"
+        },
+        "nfs_write_denied": {
+          "node": "backup01",
+          "code": 1,
+          "stdout": "",
+          "stderr": "touch: cannot touch '/mnt/naslab-nfs/should-not-exist': Read-only file system\n"
+        },
+        "anonymous_smb_denied": {
+          "node": "backup01",
+          "code": 1,
+          "stdout": "Anonymous login successful\ntree connect failed: NT_STATUS_ACCESS_DENIED\n",
+          "stderr": ""
+        },
+        "windows": [
+          {
+            "role": "ta",
+            "read": true,
+            "write": true,
+            "pass": true,
+            "time": "2026-10-23T15:21:52.0766050Z"
+          },
+          {
+            "role": "student",
+            "read": true,
+            "write": false,
+            "pass": true,
+            "time": "2026-10-23T15:21:52.2156762Z"
+          }
+        ]
+      },
+      "pass": true,
+      "duration_seconds": 0.6740498542785645
+    },
+    {
+      "name": "Versioned backups, read-all-data integrity check and retention",
+      "started_at": "2026-10-23T15:24:34.409284+00:00",
+      "evidence": {
+        "version1": {
+          "job": "backup",
+          "last_run": 1792769077.1683257,
+          "last_success": 1792769077.1683257,
+          "success": 1,
+          "duration": 2.4182112216949463,
+          "details": {
+            "snapshot_id": "38f159c828ce07d5a04903d195e7ab007185c69067c4a9b2cdc593ee297c46e2",
+            "snapshot_time": "2026-10-23T23:24:35.190548559+08:00",
+            "files_processed": 13,
+            "bytes_processed": 4196127,
+            "data_added": 6346
+          }
+        },
+        "change": {
+          "path": "/srv/nas-data/team-share/fixtures/report.txt",
+          "sha256": "33db59e1875e64408da27f31272c34aa596267231bfa5eba08c14c91245a16c5"
+        },
+        "version2": {
+          "job": "backup",
+          "last_run": 1792769080.198646,
+          "last_success": 1792769080.198646,
+          "success": 1,
+          "duration": 2.3144431114196777,
+          "details": {
+            "snapshot_id": "b330252087862719d5efa10500f182b1f4823ee5b2e4adbf9e3cab20fd27b3bb",
+            "snapshot_time": "2026-10-23T23:24:38.170243123+08:00",
+            "files_processed": 13,
+            "bytes_processed": 4196156,
+            "data_added": 7298
+          }
+        },
+        "integrity_check": {
+          "job": "repository_check",
+          "last_run": 1792769082.3764935,
+          "last_success": 1792769082.3764935,
+          "success": 1,
+          "duration": 1.7161002159118652,
+          "details": {
+            "output": "using temporary cache in /var/cache/naslab/restic/restic-check-cache-2621759915\ncreate exclusive lock for repository\nload indexes\ncheck all packs\ncheck snapshots, trees and blobs\n[0:00] 100.00%  3 / 3 snapshots\n\nread all data\n[0:00] 100.00%  6 / 6 packs\n\nno errors were found\n",
+            "read_all_data": true
+          }
+        },
+        "retention": {
+          "job": "retention",
+          "last_run": 1792769087.9905446,
+          "last_success": 1792769087.9905446,
+          "success": 1,
+          "duration": 5.14013409614563,
+          "details": {
+            "dry_run": "Applying Policy: keep 7 daily, 4 weekly, 3 monthly snapshots\nkeep 2 snapshots:\nID        Time                 Host        Tags        Reasons           Paths\n--------------------------------------------------------------------------------------\n9d915784  2026-10-23 23:20:59  nas01       naslab-v1   daily snapshot    /srv/nas-data\n                                                       weekly snapshot\n                                                       monthly snapshot\nb3302520  2026-10-23 23:24:38  nas01       naslab-v1   daily snapshot    /srv/nas-data\n                                                       weekly snapshot\n                                                       monthly snapshot\n--------------------------------------------------------------------------------------\n2 snapshots\n\nremove 1 snapshots:\nID        Time                 Host        Tags        Paths\n--------------------------------------------------------------------\n38f159c8  2026-10-23 23:24:35  nas01       naslab-v1   /srv/nas-data\n--------------------------------------------------------------------\n1 snapshots\n\nWould have removed the following snapshots:\n{38f159c8}\n\n",
+            "applied": true,
+            "output": "Applying Policy: keep 7 daily, 4 weekly, 3 monthly snapshots\nkeep 2 snapshots:\nID        Time                 Host        Tags        Reasons           Paths\n--------------------------------------------------------------------------------------\n9d915784  2026-10-23 23:20:59  nas01       naslab-v1   daily snapshot    /srv/nas-data\n                                                       weekly snapshot\n                                                       monthly snapshot\nb3302520  2026-10-23 23:24:38  nas01       naslab-v1   daily snapshot    /srv/nas-data\n                                                       weekly snapshot\n                                                       monthly snapshot\n--------------------------------------------------------------------------------------\n2 snapshots\n\nremove 1 snapshots:\nID        Time                 Host        Tags        Paths\n--------------------------------------------------------------------\n38f159c8  2026-10-23 23:24:35  nas01       naslab-v1   /srv/nas-data\n--------------------------------------------------------------------\n1 snapshots\n\n[0:00] 100.00%  1 / 1 files deleted\n\n",
+            "prune": "loading indexes...\nloading all snapshots...\nfinding data that is still in use for 2 snapshots\n[0:00] 100.00%  2 / 2 snapshots\n\nsearching used packs...\ncollecting packs for deletion and repacking\n[0:00] 100.00%  6 / 6 packs processed\n\n\nto repack:             6 blobs / 2.754 KiB\nthis removes:          5 blobs / 1.979 KiB\nto delete:             0 blobs / 0 B\ntotal prune:           5 blobs / 1.979 KiB\nremaining:            34 blobs / 4.008 MiB\nunused size after prune: 0 B (0.00% of remaining size)\n\nrepacking packs\n[0:00] 100.00%  1 / 1 packs repacked\n\nrebuilding index\n[0:00] 100.00%  6 / 6 packs processed\n\ndeleting obsolete index files\n[0:00] 100.00%  3 / 3 files deleted\n\nremoving 1 old packs\n[0:00] 100.00%  1 / 1 files deleted\n\ndone\n",
+            "post_prune_check": "using temporary cache in /var/cache/naslab/restic/restic-check-cache-591493918\ncreate exclusive lock for repository\nload indexes\ncheck all packs\ncheck snapshots, trees and blobs\n[0:00] 100.00%  2 / 2 snapshots\n\nno errors were found\n"
+          }
+        }
+      },
+      "pass": true,
+      "duration_seconds": 13.699501991271973
+    },
+    {
+      "name": "T01 Accidental deletion and exact-version restore",
+      "started_at": "2026-10-23T15:24:48.109788+00:00",
+      "evidence": {
+        "deletion": {
+          "path": "/srv/nas-data/team-share/fixtures/report.txt",
+          "deleted_sha256": "33db59e1875e64408da27f31272c34aa596267231bfa5eba08c14c91245a16c5",
+          "deleted": true
+        },
+        "restore": {
+          "job": "restore_test",
+          "last_run": 1792769089.8099878,
+          "last_success": 1792769089.8099878,
+          "success": 1,
+          "duration": 1.1374635696411133,
+          "details": {
+            "snapshot_id": "b330252087862719d5efa10500f182b1f4823ee5b2e4adbf9e3cab20fd27b3bb",
+            "target": "/srv/nas-restore/1792769088-8065",
+            "restored_source": "/srv/nas-restore/1792769088-8065/srv/nas-data",
+            "verified_files": 3,
+            "checksum_and_metadata": "PASS"
+          }
+        },
+        "recovered": {
+          "path": "/srv/nas-data/team-share/fixtures/report.txt",
+          "sha256": "33db59e1875e64408da27f31272c34aa596267231bfa5eba08c14c91245a16c5"
+        },
+        "client": {
+          "node": "backup01",
+          "code": 0,
+          "stdout": "Lab report version 2: verified version management\n",
+          "stderr": "getting file \\fixtures\\report.txt of size 50 as /tmp/naslab-recovered-report.txt (24.4 KiloBytes/sec) (average 24.4 KiloBytes/sec)\n"
+        },
+        "rto_seconds": 2.4958231449127197
+      },
+      "pass": true,
+      "duration_seconds": 2.4958231449127197
+    },
+    {
+      "name": "T02 SFTP unavailable: failure and recovery notifications",
+      "started_at": "2026-10-23T15:24:50.831237+00:00",
+      "evidence": {
+        "failed_job": {
+          "node": "nas01",
+          "code": 1,
+          "stdout": "{\"job\": \"backup\", \"last_run\": 1792769091.390461, \"last_success\": 1792769080.198646, \"success\": 0, \"duration\": 0.008473873138427734, \"details\": {\"error\": \"ssh exited 255: ssh: connect to host 172.28.90.20 port 22: Connection refused\\n \"}, \"time\": \"2026-10-23T15:24:51.391090+00:00\"}\n",
+          "stderr": "ssh exited 255: ssh: connect to host 172.28.90.20 port 22: Connection refused\n \n"
+        },
+        "firing": {
+          "received_at": "2026-10-23T15:25:20.192721+00:00",
+          "delay_seconds": 29.361483335494995,
+          "status": "firing",
+          "labels": {
+            "alertname": "NasLabJobFailed",
+            "host": "nas01",
+            "instance": "172.28.90.10:9100",
+            "job": "backup",
+            "severity": "critical"
+          },
+          "annotations": {
+            "runbook": "docs/runbooks/backup-failure.md",
+            "summary": "Last backup job failed"
+          }
+        },
+        "successful_job": {
+          "job": "backup",
+          "last_run": 1792769195.40084,
+          "last_success": 1792769195.40084,
+          "success": 1,
+          "duration": 2.4675352573394775,
+          "details": {
+            "snapshot_id": "ce1326380390fb07ab524ab71d44f614a5d2db05a39288a8bf548e51c737dc50",
+            "snapshot_time": "2026-10-23T23:26:33.388824633+08:00",
+            "files_processed": 13,
+            "bytes_processed": 4196156,
+            "data_added": 6718
+          }
+        },
+        "resolved": {
+          "received_at": "2026-10-23T15:26:50.209318+00:00",
+          "delay_seconds": 18.021787881851196,
+          "status": "resolved",
+          "labels": {
+            "alertname": "NasLabJobFailed",
+            "host": "nas01",
+            "instance": "172.28.90.10:9100",
+            "job": "backup",
+            "severity": "critical"
+          },
+          "annotations": {
+            "runbook": "docs/runbooks/backup-failure.md",
+            "summary": "Last backup job failed"
+          }
+        }
+      },
+      "pass": true,
+      "duration_seconds": 119.77059721946716
+    },
+    {
+      "name": "T04 SMB outage: failure and recovery notifications",
+      "started_at": "2026-10-23T15:26:50.602831+00:00",
+      "evidence": {
+        "firing": {
+          "received_at": "2026-10-23T15:29:28.190807+00:00",
+          "delay_seconds": 157.58797550201416,
+          "status": "firing",
+          "labels": {
+            "alertname": "NasLabServiceUnavailable",
+            "host": "backup01",
+            "instance": "172.28.90.20:9100",
+            "job": "node",
+            "service": "smb",
+            "severity": "critical"
+          },
+          "annotations": {
+            "runbook": "docs/runbooks/share-unavailable.md",
+            "summary": "Client smb access failed"
+          }
+        },
+        "resolved": {
+          "received_at": "2026-10-23T15:29:58.201771+00:00",
+          "delay_seconds": 28.210795640945435,
+          "status": "resolved",
+          "labels": {
+            "alertname": "NasLabServiceUnavailable",
+            "host": "backup01",
+            "instance": "172.28.90.20:9100",
+            "job": "node",
+            "service": "smb",
+            "severity": "critical"
+          },
+          "annotations": {
+            "runbook": "docs/runbooks/share-unavailable.md",
+            "summary": "Client smb access failed"
+          }
+        }
+      },
+      "pass": true,
+      "duration_seconds": 191.4745671749115
+    },
+    {
+      "name": "T03 Capacity pressure: critical and recovery notifications",
+      "started_at": "2026-10-23T15:35:15.770816+00:00",
+      "evidence": {
+        "controlled_filesystem": {
+          "mountpoint": "/mnt/naslab-capacity-test",
+          "used_percent": 93.35839127983462
+        },
+        "firing": {
+          "received_at": "2026-10-23T15:37:43.191308+00:00",
+          "delay_seconds": 147.42049098014832,
+          "status": "firing",
+          "labels": {
+            "alertname": "NasLabStorageCritical",
+            "device": "/dev/loop0",
+            "fstype": "ext4",
+            "host": "nas01",
+            "instance": "172.28.90.10:9100",
+            "job": "node",
+            "mountpoint": "/mnt/naslab-capacity-test",
+            "severity": "critical"
+          },
+          "annotations": {
+            "runbook": "docs/runbooks/storage-capacity.md",
+            "summary": "Filesystem /mnt/naslab-capacity-test exceeds 90% used"
+          }
+        },
+        "after_cleanup": {
+          "used_percent": 0.022552151851155798
+        },
+        "resolved": {
+          "received_at": "2026-10-23T15:38:13.203856+00:00",
+          "delay_seconds": 28.267629623413086,
+          "status": "resolved",
+          "labels": {
+            "alertname": "NasLabStorageCritical",
+            "device": "/dev/loop0",
+            "fstype": "ext4",
+            "host": "nas01",
+            "instance": "172.28.90.10:9100",
+            "job": "node",
+            "mountpoint": "/mnt/naslab-capacity-test",
+            "severity": "critical"
+          },
+          "annotations": {
+            "runbook": "docs/runbooks/storage-capacity.md",
+            "summary": "Filesystem /mnt/naslab-capacity-test exceeds 90% used"
+          }
+        }
+      },
+      "pass": true,
+      "duration_seconds": 181.1849067211151
+    },
+    {
+      "name": "T08 Data and SMB/NFS service disaster recovery",
+      "started_at": "2026-10-23T15:38:16.958212+00:00",
+      "evidence": {
+        "snapshot": {
+          "job": "backup",
+          "last_run": 1792769901.1145191,
+          "last_success": 1792769901.1145191,
+          "success": 1,
+          "duration": 3.28865909576416,
+          "details": {
+            "snapshot_id": "538a5b690a069481dbead58c975b63a52c82d39d29beb9ce8f9c12e3c1f70c8c",
+            "snapshot_time": "2026-10-23T23:38:18.579701182+08:00",
+            "files_processed": 13,
+            "bytes_processed": 4196156,
+            "data_added": 5084
+          }
+        },
+        "isolated": {
+          "quarantine": "/srv/nas-data/.lab-quarantine/1792769901",
+          "shares_unavailable": true
+        },
+        "restore": {
+          "job": "restore_test",
+          "last_run": 1792769903.19058,
+          "last_success": 1792769903.19058,
+          "success": 1,
+          "duration": 1.1793880462646484,
+          "details": {
+            "snapshot_id": "538a5b690a069481dbead58c975b63a52c82d39d29beb9ce8f9c12e3c1f70c8c",
+            "target": "/srv/nas-restore/1792769902-10722",
+            "restored_source": "/srv/nas-restore/1792769902-10722/srv/nas-data",
+            "verified_files": 3,
+            "checksum_and_metadata": "PASS"
+          }
+        },
+        "recovered": {
+          "services_restored": true,
+          "source_snapshot": "538a5b690a069481dbead58c975b63a52c82d39d29beb9ce8f9c12e3c1f70c8c"
+        },
+        "client": {
+          "node": "backup01",
+          "code": 0,
+          "stdout": "{\n  \"role\": \"backup01\",\n  \"metrics\": [\n    \"naslab_healthcheck_last_run_timestamp_seconds 1792769904.3593485\",\n    \"naslab_storage_mount_ok 1\",\n    \"naslab_service_probe_success{service=\\\"smb\\\"} 1\",\n    \"naslab_service_probe_success{service=\\\"nfs\\\"} 1\"\n  ]\n}\nLab report version 2: verified version management\n",
+          "stderr": "getting file \\fixtures\\report.txt of size 50 as /tmp/naslab-dr-report.txt (24.4 KiloBytes/sec) (average 24.4 KiloBytes/sec)\n"
+        },
+        "rto_seconds": 2.761284589767456,
+        "recovery_point_age_seconds": 3.037020206451416,
+        "rto_target_seconds": 1800,
+        "scope": "Controlled static share data and SMB/NFS service recovery on existing NAS VM"
+      },
+      "pass": true,
+      "duration_seconds": 7.419793128967285
+    }
+  ],
+  "recovery_snapshot": "b330252087862719d5efa10500f182b1f4823ee5b2e4adbf9e3cab20fd27b3bb",
+  "previous_failed_attempts": [
+    {
+      "name": "T03 Capacity pressure: critical and recovery notifications",
+      "started_at": "2026-10-23T15:30:02.078399+00:00",
+      "pass": false,
+      "error": "Notification timeout: NasLabStorageCritical firing",
+      "duration_seconds": 241.6418571472168
+    }
+  ],
+  "completed_at": "2026-10-23T15:38:24.379118+00:00",
+  "all_passed": true
+}

@@ -1,0 +1,6 @@
+{
+  "role": "nas01",
+  "source": "/srv/nas-data",
+  "repository": "sftp:naslab-backup:/srv/restic-repo/repository",
+  "password_file": "/etc/naslab/restic-password"
+}

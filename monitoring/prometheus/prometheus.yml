@@ -1,0 +1,20 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+rule_files:
+  - /etc/prometheus/rules/*.yml
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['127.0.0.1:9093']
+scrape_configs:
+  - job_name: node
+    honor_labels: true
+    static_configs:
+      - targets: ['172.28.90.10:9100']
+        labels: {host: nas01}
+      - targets: ['172.28.90.20:9100']
+        labels: {host: backup01}
+  - job_name: prometheus
+    static_configs:
+      - targets: ['127.0.0.1:9090']

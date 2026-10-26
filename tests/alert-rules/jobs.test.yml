@@ -1,0 +1,28 @@
+rule_files:
+  - ../../monitoring/prometheus/rules/backup.yml
+evaluation_interval: 15s
+tests:
+  - interval: 15s
+    input_series:
+      - series: 'naslab_job_last_run_success{job="backup",host="nas01"}'
+        values: '1 0+0x10'
+      - series: 'naslab_job_last_success_timestamp_seconds{job="backup",host="nas01"}'
+        values: '1+0x10'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: NasLabJobFailed
+        exp_alerts:
+          - exp_labels: {job: backup, host: nas01, severity: critical}
+            exp_annotations:
+              summary: Last backup job failed
+              runbook: docs/runbooks/backup-failure.md
+  - interval: 15s
+    input_series: []
+    alert_rule_test:
+      - eval_time: 6m
+        alertname: NasLabBackupMetricsMissing
+        exp_alerts:
+          - exp_labels: {job: backup, severity: critical}
+            exp_annotations:
+              summary: Backup status has never been exported
+              runbook: docs/runbooks/backup-failure.md

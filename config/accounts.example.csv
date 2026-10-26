@@ -1,0 +1,4 @@
+username,uid,role,materials,team-share
+student01,2001,student,read,read-write
+ta01,2002,teaching-assistant,read-write,read-write
+backupuser,2100,backup-repository,none,none

@@ -1,0 +1,17 @@
+global:
+  resolve_timeout: 1m
+route:
+  receiver: lab-inbox
+  group_by: [alertname, host, service, job, mountpoint]
+  group_wait: 5s
+  group_interval: 15s
+  repeat_interval: 4h
+receivers:
+  - name: lab-inbox
+    webhook_configs:
+      - url: http://127.0.0.1:8088/alerts
+        send_resolved: true
+inhibit_rules:
+  - source_matchers: ['severity="critical"', 'alertname="NasLabStorageCritical"']
+    target_matchers: ['severity="warning"', 'alertname="NasLabStorageWarning"']
+    equal: [host, mountpoint]

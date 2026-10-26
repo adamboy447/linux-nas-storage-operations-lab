@@ -1,0 +1,560 @@
+{
+  "collected_at": "2026-10-23T15:41:45.236370+00:00",
+  "nodes": {
+    "nas01": {
+      "node": "nas01",
+      "code": 0,
+      "stdout": "nas01\nUbuntu 24.04.5 LTS\n6.8.0-147-generic\nrestic 0.16.4 compiled with go1.22.2 on linux/amd64\nprometheus-node-exporter\t1.7.0-1ubuntu0.3\nNAME     SIZE FSTYPE  LABEL           MOUNTPOINTS\nsr0       66K iso9660 cidata          \nsr1     1024M                         \nvda       24G                         \n├─vda1    23G ext4    cloudimg-rootfs /\n├─vda14    4M                         \n├─vda15  106M vfat    UEFI            /boot/efi\n└─vda16  913M ext4    BOOT            /boot\nvdb        5G ext4    NASLAB_DATA     /srv/nas-data\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/vda1        23G  2.3G   20G  11% /\nNEXT                             LEFT LAST                         PASSED UNIT                      ACTIVATES\nFri 2026-10-23 23:41:46 CST        1s Fri 2026-10-23 23:41:31 CST 14s ago naslab-healthcheck.timer  naslab-healthcheck.service\nSat 2026-10-24 21:00:00 CST       21h Fri 2026-10-23 23:20:57 CST       - naslab-backup.timer       naslab-backup.service\nSun 2026-10-25 22:00:00 CST 1 day 22h Fri 2026-10-23 23:20:57 CST       - naslab-maintenance.timer  naslab-maintenance.service\nSun 2026-10-25 23:00:00 CST 1 day 23h Fri 2026-10-23 23:20:57 CST       - naslab-verify.timer       naslab-verify.service\nMon 2026-10-26 00:00:00 CST    2 days Fri 2026-10-23 23:20:58 CST       - naslab-restore-test.timer naslab-restore-test.service\n\n5 timers listed.\nPass --all to see loaded but inactive timers, too.\n",
+      "stderr": ""
+    },
+    "backup01": {
+      "node": "backup01",
+      "code": 0,
+      "stdout": "backup01\nUbuntu 24.04.5 LTS\n6.8.0-147-generic\nrestic 0.16.4 compiled with go1.22.2 on linux/amd64\nprometheus-node-exporter\t1.7.0-1ubuntu0.3\nNAME     SIZE FSTYPE  LABEL           MOUNTPOINTS\nsr0       66K iso9660 cidata          \nsr1     1024M                         \nvda       24G                         \n├─vda1    23G ext4    cloudimg-rootfs /\n├─vda14    4M                         \n├─vda15  106M vfat    UEFI            /boot/efi\n└─vda16  913M ext4    BOOT            /boot\nvdb       15G ext4    NASLAB_BACKUP   /srv/restic-repo\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/vda1        23G  5.1G   18G  23% /\nNEXT                        LEFT LAST                         PASSED UNIT                     ACTIVATES\nFri 2026-10-23 23:41:50 CST   4s Fri 2026-10-23 23:41:35 CST 10s ago naslab-healthcheck.timer naslab-healthcheck.service\n\n1 timers listed.\nPass --all to see loaded but inactive timers, too.\n",
+      "stderr": ""
+    }
+  },
+  "quality_checks": {
+    "node": "nas01",
+    "code": 0,
+    "stdout": "{\"job\": \"backup\", \"last_run\": 1792770106.2074723, \"last_success\": 1792770106.2074723, \"success\": 1, \"duration\": 1792770105.2074723, \"details\": {\"snapshot_id\": \"abcdef\"}, \"time\": \"2026-10-23T15:41:46.207758+00:00\"}\n{\"job\": \"backup\", \"last_run\": 1792770106.2081697, \"last_success\": 1792770106.2074723, \"success\": 0, \"duration\": 1792770105.2081697, \"details\": {\"error\": \"repository unavailable\"}, \"time\": \"2026-10-23T15:41:46.208709+00:00\"}\n",
+    "stderr": "test_failed_run_preserves_last_success (test_operations.OperationsTests.test_failed_run_preserves_last_success) ... ok\ntest_manifest_detects_content_change (test_operations.OperationsTests.test_manifest_detects_content_change) ... ok\ntest_missing_and_unexpected_files_are_rejected (test_operations.OperationsTests.test_missing_and_unexpected_files_are_rejected) ... ok\ntest_permission_change_is_detected (test_operations.OperationsTests.test_permission_change_is_detected) ... ok\ntest_preflight_rejects_unmounted_source_directory (test_operations.OperationsTests.test_preflight_rejects_unmounted_source_directory) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.006s\n\nOK\n"
+  },
+  "monitoring_checks": {
+    "node": "backup01",
+    "code": 0,
+    "stdout": "Checking /etc/prometheus/prometheus.yml\n  SUCCESS: 2 rule files found\n SUCCESS: /etc/prometheus/prometheus.yml is valid prometheus config file syntax\n\nChecking /etc/prometheus/rules/backup.yml\n  SUCCESS: 3 rules found\n\nChecking /etc/prometheus/rules/storage.yml\n  SUCCESS: 6 rules found\n\nChecking '/etc/alertmanager/alertmanager.yml'  SUCCESS\nFound:\n - global config\n - route\n - 1 inhibit rules\n - 1 receivers\n - 0 templates\n\n  SUCCESS\n\nnaslab-prometheus-1 Up About a minute\nnaslab-grafana-1 Up About a minute\nnaslab-alertmanager-1 Up About a minute\nprom/prometheus:v3.15.1 sha256:fa3302279710be2f21a8301ec17a8b4f2301fd829bd113839b3b6b02b6f191a2\ngrafana/grafana:13.2.4 sha256:dbbc38ea21103cefb50396340cd88afec779c7e070b0a7bf5a75b4ce46651d3f\nprom/alertmanager:v0.34.1 sha256:e9733bafb1bdef9b00e25a21f8f99dc26a22224bf16641ad754d1649f4c3357a\n",
+    "stderr": ""
+  },
+  "schedule_test": {
+    "pass": true,
+    "calendar_utc": "2026-10-23 15:33:17 UTC",
+    "timer_stopped_across_deadline": true,
+    "before_last_run": 1792769195.40084,
+    "after_last_run": 1792769603.8337798,
+    "production_unit": "naslab-backup.service",
+    "snapshot_id": "8495ef4434224b7477897a742efdc7b9e2408f640fae145da9f4a13ded6484c8",
+    "catchup_delay_seconds": 2.617365598678589
+  },
+  "encryption_test": {
+    "pass": true,
+    "wrong_password_exit_code": 1,
+    "stderr": "Fatal: wrong password or no key found",
+    "test": "Actual remote repository rejects incorrect decryption password"
+  },
+  "systemd_jobs": {
+    "node": "nas01",
+    "code": 0,
+    "stdout": "Result=success\nExecMainStatus=0\nId=naslab-backup.service\n\nResult=success\nExecMainStatus=0\nId=naslab-verify.service\n\nResult=success\nExecMainStatus=0\nId=naslab-restore-test.service\n",
+    "stderr": ""
+  },
+  "targets": [
+    {
+      "discoveredLabels": {
+        "__address__": "172.28.90.10:9100",
+        "__always_scrape_classic_histograms__": "false",
+        "__convert_classic_histograms_to_nhcb__": "false",
+        "__metrics_path__": "/metrics",
+        "__scheme__": "http",
+        "__scrape_interval__": "15s",
+        "__scrape_native_histograms__": "false",
+        "__scrape_timeout__": "10s",
+        "host": "nas01",
+        "job": "node"
+      },
+      "labels": {
+        "host": "nas01",
+        "instance": "172.28.90.10:9100",
+        "job": "node"
+      },
+      "scrapePool": "node",
+      "scrapeUrl": "http://172.28.90.10:9100/metrics",
+      "globalUrl": "http://172.28.90.10:9100/metrics",
+      "lastError": "",
+      "lastScrape": "2026-10-23T15:41:42.017970344Z",
+      "lastScrapeDuration": 0.089643582,
+      "health": "up",
+      "scrapeInterval": "15s",
+      "scrapeTimeout": "10s"
+    },
+    {
+      "discoveredLabels": {
+        "__address__": "172.28.90.20:9100",
+        "__always_scrape_classic_histograms__": "false",
+        "__convert_classic_histograms_to_nhcb__": "false",
+        "__metrics_path__": "/metrics",
+        "__scheme__": "http",
+        "__scrape_interval__": "15s",
+        "__scrape_native_histograms__": "false",
+        "__scrape_timeout__": "10s",
+        "host": "backup01",
+        "job": "node"
+      },
+      "labels": {
+        "host": "backup01",
+        "instance": "172.28.90.20:9100",
+        "job": "node"
+      },
+      "scrapePool": "node",
+      "scrapeUrl": "http://172.28.90.20:9100/metrics",
+      "globalUrl": "http://172.28.90.20:9100/metrics",
+      "lastError": "",
+      "lastScrape": "2026-10-23T15:41:45.72516514Z",
+      "lastScrapeDuration": 0.118837163,
+      "health": "up",
+      "scrapeInterval": "15s",
+      "scrapeTimeout": "10s"
+    },
+    {
+      "discoveredLabels": {
+        "__address__": "127.0.0.1:9090",
+        "__always_scrape_classic_histograms__": "false",
+        "__convert_classic_histograms_to_nhcb__": "false",
+        "__metrics_path__": "/metrics",
+        "__scheme__": "http",
+        "__scrape_interval__": "15s",
+        "__scrape_native_histograms__": "false",
+        "__scrape_timeout__": "10s",
+        "job": "prometheus"
+      },
+      "labels": {
+        "instance": "127.0.0.1:9090",
+        "job": "prometheus"
+      },
+      "scrapePool": "prometheus",
+      "scrapeUrl": "http://127.0.0.1:9090/metrics",
+      "globalUrl": "http://backup01:9090/metrics",
+      "lastError": "",
+      "lastScrape": "2026-10-23T15:41:42.548859171Z",
+      "lastScrapeDuration": 0.005376763,
+      "health": "up",
+      "scrapeInterval": "15s",
+      "scrapeTimeout": "10s"
+    }
+  ],
+  "dashboard": {
+    "uid": "naslab-operations",
+    "title": "Linux NAS Storage Operations and Disaster Recovery Lab",
+    "panels": [
+      {
+        "title": "Node availability",
+        "query_success": true,
+        "series_count": 2
+      },
+      {
+        "title": "Client share probes",
+        "query_success": true,
+        "series_count": 2
+      },
+      {
+        "title": "Last job result",
+        "query_success": true,
+        "series_count": 4
+      },
+      {
+        "title": "Backup age (hours)",
+        "query_success": true,
+        "series_count": 1
+      },
+      {
+        "title": "Data and repository usage",
+        "query_success": true,
+        "series_count": 2
+      },
+      {
+        "title": "Filesystem inodes used",
+        "query_success": true,
+        "series_count": 2
+      },
+      {
+        "title": "Disk read throughput",
+        "query_success": true,
+        "series_count": 4
+      },
+      {
+        "title": "Disk write throughput",
+        "query_success": true,
+        "series_count": 4
+      },
+      {
+        "title": "Disk IOPS",
+        "query_success": true,
+        "series_count": 4
+      },
+      {
+        "title": "Job duration",
+        "query_success": true,
+        "series_count": 4
+      },
+      {
+        "title": "Memory used",
+        "query_success": true,
+        "series_count": 2
+      },
+      {
+        "title": "Firing alerts",
+        "query_success": true,
+        "series_count": 0
+      }
+    ]
+  },
+  "browser_visual_check": {
+    "completed": false,
+    "reason": "The browser tool refused authority to open the local Grafana origin. No alternate browser or screenshot workaround was used. Dashboard provisioning and every panel query were validated via the authorised service APIs."
+  },
+  "backup_state": {
+    "job": "backup",
+    "last_run": 1792770104.8446991,
+    "last_success": 1792770104.8446991,
+    "success": 1,
+    "duration": 2.436549186706543,
+    "details": {
+      "snapshot_id": "0970911606d39cddcb7b05fb17cd54f10b2f75af77d229058bccaa9994a1a843",
+      "snapshot_time": "2026-10-23T23:41:42.696080841+08:00",
+      "files_processed": 19,
+      "bytes_processed": 8390646,
+      "data_added": 5442
+    }
+  },
+  "repository_check": {
+    "job": "repository_check",
+    "last_run": 1792770037.2947216,
+    "last_success": 1792770037.2947216,
+    "success": 1,
+    "duration": 1.824737787246704,
+    "details": {
+      "output": "using temporary cache in /var/cache/naslab/restic/restic-check-cache-310011444\ncreate exclusive lock for repository\nload indexes\ncheck all packs\ncheck snapshots, trees and blobs\n[0:00] 100.00%  6 / 6 snapshots\n\nread all data\n[0:00] 100.00%  10 / 10 packs\n\nno errors were found\n",
+      "read_all_data": true
+    }
+  },
+  "restore_state": {
+    "job": "restore_test",
+    "last_run": 1792770039.4538288,
+    "last_success": 1792770039.4538288,
+    "success": 1,
+    "duration": 2.0933775901794434,
+    "details": {
+      "snapshot_id": "2325bbaa3f7e9b239b57d95b59ca5b272ffc63a1c75fbcfdad7ebb3fcd599a40",
+      "target": "/srv/nas-restore/1792770038-1342",
+      "restored_source": "/srv/nas-restore/1792770038-1342/srv/nas-data",
+      "verified_files": 3,
+      "checksum_and_metadata": "PASS"
+    }
+  },
+  "notifications": [
+    {
+      "received_at": "2026-10-23T15:25:20.192721+00:00",
+      "payload": {
+        "receiver": "lab-inbox",
+        "status": "firing",
+        "alerts": [
+          {
+            "status": "firing",
+            "labels": {
+              "alertname": "NasLabJobFailed",
+              "host": "nas01",
+              "instance": "172.28.90.10:9100",
+              "job": "backup",
+              "severity": "critical"
+            },
+            "annotations": {
+              "runbook": "docs/runbooks/backup-failure.md",
+              "summary": "Last backup job failed"
+            },
+            "startsAt": "2026-10-23T15:25:15.183Z",
+            "endsAt": "0001-01-01T00:00:00Z",
+            "generatorURL": "http://backup01:9090/graph?g0.expr=naslab_job_last_run_success%7Bjob%3D~%22backup%7Crepository_check%7Crestore_test%7Cretention%22%7D+%3D%3D+0&g0.tab=1",
+            "fingerprint": "32546716ae0a08c0"
+          }
+        ],
+        "notification_reason": "first notification",
+        "groupLabels": {
+          "alertname": "NasLabJobFailed",
+          "host": "nas01",
+          "job": "backup"
+        },
+        "commonLabels": {
+          "alertname": "NasLabJobFailed",
+          "host": "nas01",
+          "instance": "172.28.90.10:9100",
+          "job": "backup",
+          "severity": "critical"
+        },
+        "commonAnnotations": {
+          "runbook": "docs/runbooks/backup-failure.md",
+          "summary": "Last backup job failed"
+        },
+        "routeLabels": {},
+        "externalURL": "http://backup01:9093",
+        "version": "4",
+        "groupKey": "{}:{alertname=\"NasLabJobFailed\", host=\"nas01\", job=\"backup\"}",
+        "truncatedAlerts": 0
+      }
+    },
+    {
+      "received_at": "2026-10-23T15:26:50.209318+00:00",
+      "payload": {
+        "receiver": "lab-inbox",
+        "status": "resolved",
+        "alerts": [
+          {
+            "status": "resolved",
+            "labels": {
+              "alertname": "NasLabJobFailed",
+              "host": "nas01",
+              "instance": "172.28.90.10:9100",
+              "job": "backup",
+              "severity": "critical"
+            },
+            "annotations": {
+              "runbook": "docs/runbooks/backup-failure.md",
+              "summary": "Last backup job failed"
+            },
+            "startsAt": "2026-10-23T15:25:15.183Z",
+            "endsAt": "2026-10-23T15:26:45.183Z",
+            "generatorURL": "http://backup01:9090/graph?g0.expr=naslab_job_last_run_success%7Bjob%3D~%22backup%7Crepository_check%7Crestore_test%7Cretention%22%7D+%3D%3D+0&g0.tab=1",
+            "fingerprint": "32546716ae0a08c0"
+          }
+        ],
+        "notification_reason": "all alerts resolved",
+        "groupLabels": {
+          "alertname": "NasLabJobFailed",
+          "host": "nas01",
+          "job": "backup"
+        },
+        "commonLabels": {
+          "alertname": "NasLabJobFailed",
+          "host": "nas01",
+          "instance": "172.28.90.10:9100",
+          "job": "backup",
+          "severity": "critical"
+        },
+        "commonAnnotations": {
+          "runbook": "docs/runbooks/backup-failure.md",
+          "summary": "Last backup job failed"
+        },
+        "routeLabels": {},
+        "externalURL": "http://backup01:9093",
+        "version": "4",
+        "groupKey": "{}:{alertname=\"NasLabJobFailed\", host=\"nas01\", job=\"backup\"}",
+        "truncatedAlerts": 0
+      }
+    },
+    {
+      "received_at": "2026-10-23T15:29:28.190807+00:00",
+      "payload": {
+        "receiver": "lab-inbox",
+        "status": "firing",
+        "alerts": [
+          {
+            "status": "firing",
+            "labels": {
+              "alertname": "NasLabServiceUnavailable",
+              "host": "backup01",
+              "instance": "172.28.90.20:9100",
+              "job": "node",
+              "service": "smb",
+              "severity": "critical"
+            },
+            "annotations": {
+              "runbook": "docs/runbooks/share-unavailable.md",
+              "summary": "Client smb access failed"
+            },
+            "startsAt": "2026-10-23T15:29:23.182Z",
+            "endsAt": "0001-01-01T00:00:00Z",
+            "generatorURL": "http://backup01:9090/graph?g0.expr=naslab_service_probe_success+%3D%3D+0&g0.tab=1",
+            "fingerprint": "1b4fdb13b98c97b3"
+          }
+        ],
+        "notification_reason": "first notification",
+        "groupLabels": {
+          "alertname": "NasLabServiceUnavailable",
+          "host": "backup01",
+          "job": "node",
+          "service": "smb"
+        },
+        "commonLabels": {
+          "alertname": "NasLabServiceUnavailable",
+          "host": "backup01",
+          "instance": "172.28.90.20:9100",
+          "job": "node",
+          "service": "smb",
+          "severity": "critical"
+        },
+        "commonAnnotations": {
+          "runbook": "docs/runbooks/share-unavailable.md",
+          "summary": "Client smb access failed"
+        },
+        "routeLabels": {},
+        "externalURL": "http://backup01:9093",
+        "version": "4",
+        "groupKey": "{}:{alertname=\"NasLabServiceUnavailable\", host=\"backup01\", job=\"node\", service=\"smb\"}",
+        "truncatedAlerts": 0
+      }
+    },
+    {
+      "received_at": "2026-10-23T15:29:58.201771+00:00",
+      "payload": {
+        "receiver": "lab-inbox",
+        "status": "resolved",
+        "alerts": [
+          {
+            "status": "resolved",
+            "labels": {
+              "alertname": "NasLabServiceUnavailable",
+              "host": "backup01",
+              "instance": "172.28.90.20:9100",
+              "job": "node",
+              "service": "smb",
+              "severity": "critical"
+            },
+            "annotations": {
+              "runbook": "docs/runbooks/share-unavailable.md",
+              "summary": "Client smb access failed"
+            },
+            "startsAt": "2026-10-23T15:29:23.182Z",
+            "endsAt": "2026-10-23T15:29:53.182Z",
+            "generatorURL": "http://backup01:9090/graph?g0.expr=naslab_service_probe_success+%3D%3D+0&g0.tab=1",
+            "fingerprint": "1b4fdb13b98c97b3"
+          }
+        ],
+        "notification_reason": "all alerts resolved",
+        "groupLabels": {
+          "alertname": "NasLabServiceUnavailable",
+          "host": "backup01",
+          "job": "node",
+          "service": "smb"
+        },
+        "commonLabels": {
+          "alertname": "NasLabServiceUnavailable",
+          "host": "backup01",
+          "instance": "172.28.90.20:9100",
+          "job": "node",
+          "service": "smb",
+          "severity": "critical"
+        },
+        "commonAnnotations": {
+          "runbook": "docs/runbooks/share-unavailable.md",
+          "summary": "Client smb access failed"
+        },
+        "routeLabels": {},
+        "externalURL": "http://backup01:9093",
+        "version": "4",
+        "groupKey": "{}:{alertname=\"NasLabServiceUnavailable\", host=\"backup01\", job=\"node\", service=\"smb\"}",
+        "truncatedAlerts": 0
+      }
+    },
+    {
+      "received_at": "2026-10-23T15:37:43.191308+00:00",
+      "payload": {
+        "receiver": "lab-inbox",
+        "status": "firing",
+        "alerts": [
+          {
+            "status": "firing",
+            "labels": {
+              "alertname": "NasLabStorageCritical",
+              "device": "/dev/loop0",
+              "fstype": "ext4",
+              "host": "nas01",
+              "instance": "172.28.90.10:9100",
+              "job": "node",
+              "mountpoint": "/mnt/naslab-capacity-test",
+              "severity": "critical"
+            },
+            "annotations": {
+              "runbook": "docs/runbooks/storage-capacity.md",
+              "summary": "Filesystem /mnt/naslab-capacity-test exceeds 90% used"
+            },
+            "startsAt": "2026-10-23T15:37:38.182Z",
+            "endsAt": "0001-01-01T00:00:00Z",
+            "generatorURL": "http://backup01:9090/graph?g0.expr=%28100+%2A+%281+-+node_filesystem_avail_bytes%7Bfstype%3D%22ext4%22%2Cmountpoint%3D~%22%2Fsrv%2Fnas-data%7C%2Fsrv%2Frestic-repo%7C%2Fmnt%2Fnaslab-capacity-test%22%7D+%2F+node_filesystem_size_bytes%7Bfstype%3D%22ext4%22%2Cmountpoint%3D~%22%2Fsrv%2Fnas-data%7C%2Fsrv%2Frestic-repo%7C%2Fmnt%2Fnaslab-capacity-test%22%7D%29%29+%3E+90&g0.tab=1",
+            "fingerprint": "6ea6ea26b0a3868e"
+          }
+        ],
+        "notification_reason": "first notification",
+        "groupLabels": {
+          "alertname": "NasLabStorageCritical",
+          "host": "nas01",
+          "job": "node",
+          "mountpoint": "/mnt/naslab-capacity-test"
+        },
+        "commonLabels": {
+          "alertname": "NasLabStorageCritical",
+          "device": "/dev/loop0",
+          "fstype": "ext4",
+          "host": "nas01",
+          "instance": "172.28.90.10:9100",
+          "job": "node",
+          "mountpoint": "/mnt/naslab-capacity-test",
+          "severity": "critical"
+        },
+        "commonAnnotations": {
+          "runbook": "docs/runbooks/storage-capacity.md",
+          "summary": "Filesystem /mnt/naslab-capacity-test exceeds 90% used"
+        },
+        "routeLabels": {},
+        "externalURL": "http://backup01:9093",
+        "version": "4",
+        "groupKey": "{}:{alertname=\"NasLabStorageCritical\", host=\"nas01\", job=\"node\", mountpoint=\"/mnt/naslab-capacity-test\"}",
+        "truncatedAlerts": 0
+      }
+    },
+    {
+      "received_at": "2026-10-23T15:38:13.203856+00:00",
+      "payload": {
+        "receiver": "lab-inbox",
+        "status": "resolved",
+        "alerts": [
+          {
+            "status": "resolved",
+            "labels": {
+              "alertname": "NasLabStorageCritical",
+              "device": "/dev/loop0",
+              "fstype": "ext4",
+              "host": "nas01",
+              "instance": "172.28.90.10:9100",
+              "job": "node",
+              "mountpoint": "/mnt/naslab-capacity-test",
+              "severity": "critical"
+            },
+            "annotations": {
+              "runbook": "docs/runbooks/storage-capacity.md",
+              "summary": "Filesystem /mnt/naslab-capacity-test exceeds 90% used"
+            },
+            "startsAt": "2026-10-23T15:37:38.182Z",
+            "endsAt": "2026-10-23T15:38:08.182Z",
+            "generatorURL": "http://backup01:9090/graph?g0.expr=%28100+%2A+%281+-+node_filesystem_avail_bytes%7Bfstype%3D%22ext4%22%2Cmountpoint%3D~%22%2Fsrv%2Fnas-data%7C%2Fsrv%2Frestic-repo%7C%2Fmnt%2Fnaslab-capacity-test%22%7D+%2F+node_filesystem_size_bytes%7Bfstype%3D%22ext4%22%2Cmountpoint%3D~%22%2Fsrv%2Fnas-data%7C%2Fsrv%2Frestic-repo%7C%2Fmnt%2Fnaslab-capacity-test%22%7D%29%29+%3E+90&g0.tab=1",
+            "fingerprint": "6ea6ea26b0a3868e"
+          }
+        ],
+        "notification_reason": "all alerts resolved",
+        "groupLabels": {
+          "alertname": "NasLabStorageCritical",
+          "host": "nas01",
+          "job": "node",
+          "mountpoint": "/mnt/naslab-capacity-test"
+        },
+        "commonLabels": {
+          "alertname": "NasLabStorageCritical",
+          "device": "/dev/loop0",
+          "fstype": "ext4",
+          "host": "nas01",
+          "instance": "172.28.90.10:9100",
+          "job": "node",
+          "mountpoint": "/mnt/naslab-capacity-test",
+          "severity": "critical"
+        },
+        "commonAnnotations": {
+          "runbook": "docs/runbooks/storage-capacity.md",
+          "summary": "Filesystem /mnt/naslab-capacity-test exceeds 90% used"
+        },
+        "routeLabels": {},
+        "externalURL": "http://backup01:9093",
+        "version": "4",
+        "groupKey": "{}:{alertname=\"NasLabStorageCritical\", host=\"nas01\", job=\"node\", mountpoint=\"/mnt/naslab-capacity-test\"}",
+        "truncatedAlerts": 0
+      }
+    }
+  ]
+}

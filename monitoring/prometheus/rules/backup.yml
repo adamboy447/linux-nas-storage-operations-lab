@@ -1,0 +1,24 @@
+groups:
+  - name: naslab.jobs
+    rules:
+      - alert: NasLabJobFailed
+        expr: naslab_job_last_run_success{job=~"backup|repository_check|restore_test|retention"} == 0
+        for: 15s
+        labels: {severity: critical}
+        annotations:
+          summary: 'Last {{ $labels.job }} job failed'
+          runbook: docs/runbooks/backup-failure.md
+      - alert: NasLabBackupStale
+        expr: time() - naslab_job_last_success_timestamp_seconds{job="backup"} > 93600
+        for: 1m
+        labels: {severity: critical}
+        annotations:
+          summary: No complete backup in 26 hours
+          runbook: docs/runbooks/backup-failure.md
+      - alert: NasLabBackupMetricsMissing
+        expr: absent(naslab_job_last_success_timestamp_seconds{job="backup"})
+        for: 5m
+        labels: {severity: critical}
+        annotations:
+          summary: Backup status has never been exported
+          runbook: docs/runbooks/backup-failure.md

@@ -1,0 +1,45 @@
+groups:
+  - name: naslab.storage
+    rules:
+      - alert: NasLabStorageWarning
+        expr: (100 * (1 - node_filesystem_avail_bytes{fstype="ext4",mountpoint=~"/srv/nas-data|/srv/restic-repo|/mnt/naslab-capacity-test"} / node_filesystem_size_bytes{fstype="ext4",mountpoint=~"/srv/nas-data|/srv/restic-repo|/mnt/naslab-capacity-test"})) > 80
+        for: 2m
+        labels: {severity: warning}
+        annotations:
+          summary: 'Filesystem {{ $labels.mountpoint }} exceeds 80% used'
+          runbook: docs/runbooks/storage-capacity.md
+      - alert: NasLabStorageCritical
+        expr: (100 * (1 - node_filesystem_avail_bytes{fstype="ext4",mountpoint=~"/srv/nas-data|/srv/restic-repo|/mnt/naslab-capacity-test"} / node_filesystem_size_bytes{fstype="ext4",mountpoint=~"/srv/nas-data|/srv/restic-repo|/mnt/naslab-capacity-test"})) > 90
+        for: 2m
+        labels: {severity: critical}
+        annotations:
+          summary: 'Filesystem {{ $labels.mountpoint }} exceeds 90% used'
+          runbook: docs/runbooks/storage-capacity.md
+      - alert: NasLabMountMissing
+        expr: naslab_storage_mount_ok == 0
+        for: 30s
+        labels: {severity: critical}
+        annotations:
+          summary: Dedicated NAS or repository mount missing
+          runbook: docs/runbooks/storage-capacity.md
+      - alert: NasLabNodeDown
+        expr: up{job="node"} == 0
+        for: 1m
+        labels: {severity: critical}
+        annotations:
+          summary: 'Metrics unavailable for {{ $labels.host }}'
+          runbook: docs/runbooks/service-recovery.md
+      - alert: NasLabServiceUnavailable
+        expr: naslab_service_probe_success == 0
+        for: 2m
+        labels: {severity: critical}
+        annotations:
+          summary: 'Client {{ $labels.service }} access failed'
+          runbook: docs/runbooks/share-unavailable.md
+      - alert: NasLabHealthcheckStale
+        expr: time() - naslab_healthcheck_last_run_timestamp_seconds > 120
+        for: 30s
+        labels: {severity: warning}
+        annotations:
+          summary: Healthcheck stopped updating
+          runbook: docs/runbooks/service-recovery.md
